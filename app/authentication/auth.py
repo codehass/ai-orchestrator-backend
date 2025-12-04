@@ -1,6 +1,6 @@
 import os, jwt
 from dotenv import load_dotenv
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Request
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from passlib.context import CryptContext
 from ..models.user_model import User
@@ -51,14 +51,17 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 
 def get_current_user(
-    token: str = Depends(oauth2_schema), db: Session = Depends(database.get_db)
+    # token: str = Depends(oauth2_schema),
+    request: Request,
+    db: Session = Depends(database.get_db),
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credential",
-        headers={"WWW-Authenticate": "Bearer"},
+        headers={"X-Authentication-Error": "Cookie not found or invalid"},
     )
-
+    token = request.cookies.get("access_token")
+    print(token)
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
