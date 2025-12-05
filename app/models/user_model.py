@@ -12,4 +12,4 @@ class User(Base):
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
 
-    translations = relationship("TranslationResult", back_populates="user")
+    # translations = relationship("TranslationResult", back_populates="user")
