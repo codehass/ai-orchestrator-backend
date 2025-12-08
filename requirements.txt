@@ -11,3 +11,4 @@ passlib
 PyJWT
 uvicorn
 requests
+google-genai
