@@ -7,14 +7,18 @@ from .authentication.auth import (
     create_access_token,
     get_current_user,
 )
-from .schemas.user_schema import UserSchema, UserCreate
+from .schemas.user_schema import UserSchema, UserCreate, AnalyzeRequest
 from .models.user_model import User
+from .models.history_model import HistoryLogs
 from .db.database import engine, Base, get_db
 from fastapi.security import OAuth2PasswordRequestForm
 from datetime import timedelta
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import Response
+from .services.service_gemini import analyzer
+import json
+
 
 load_dotenv()
 ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES")
@@ -104,6 +108,38 @@ async def get_auth(request: Request):
 @app.get("/users/me", response_model=UserSchema)
 async def read_users_me(current_user: UserSchema = Depends(get_current_user)):
     return current_user
+
+
+@app.post("/analyze")
+def analyze_text(
+    body: AnalyzeRequest,
+    current_user: UserSchema = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    text = body.text
+    result = analyzer(text)
+
+    if isinstance(result, str):
+        result = json.loads(result)
+
+    category = result["category"]
+    score = result["score"]
+    summary = result["summary"]
+    sentiment = result["sentiment"]
+
+    new_article = HistoryLogs(
+        user_id=current_user.id,
+        category=category,
+        summary=summary,
+        score=score,
+        ton=sentiment,
+    )
+
+    db.add(new_article)
+    db.commit()
+    db.refresh(new_article)
+
+    return new_article
 
 
 @app.get("/")
