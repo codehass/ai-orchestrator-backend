@@ -1,8 +1,5 @@
-import os
 import requests
-from dotenv import load_dotenv
-
-load_dotenv()
+from ..config import settings
 
 categories = [
     "Politics",
@@ -27,7 +24,7 @@ def classification_service(text: str, categories_list: list[str]):
         "https://router.huggingface.co/hf-inference/models/facebook/bart-large-mnli"
     )
     headers = {
-        "Authorization": f"Bearer {os.getenv('HF_TOKEN')}",
+        "Authorization": f"Bearer {settings.HF_TOKEN}",
     }
 
     def query(payload):

@@ -1,14 +1,10 @@
-import os
 from google import genai
-from dotenv import load_dotenv
 from .service_zero_shot import classification_service, categories
 from ..schemas.user_schema import GeminiResponse
-
-load_dotenv()
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+from ..config import settings
 
 
-client = genai.Client(api_key=GEMINI_API_KEY)
+client = genai.Client(api_key=settings.GEMINI_API_KEY)
 
 
 def gemini_service(source_text: str, score: float, category: str, response_schema):
