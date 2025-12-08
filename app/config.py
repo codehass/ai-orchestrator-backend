@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 from pydantic import Field
+from pydantic import ConfigDict
 
 
 class Settings(BaseSettings):
@@ -15,9 +16,7 @@ class Settings(BaseSettings):
     GEMINI_API_KEY: str = Field(...)
     FRONTEND_URL: str = Field(...)
 
-    class Config:
-        env_file = ".env"
-        env_file_encoding = "utf-8"
+    model_config = ConfigDict(env_file=".env", env_file_encoding="utf-8")
 
 
 settings = Settings()
