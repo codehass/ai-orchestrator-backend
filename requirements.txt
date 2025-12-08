@@ -4,7 +4,6 @@ sqlalchemy
 pydantic
 psycopg2-binary
 asyncpg
-python-dotenv
 python-multipart
 httpx
 passlib
@@ -12,3 +11,4 @@ PyJWT
 uvicorn
 requests
 google-genai
+pydantic-settings
