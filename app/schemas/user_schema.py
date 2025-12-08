@@ -1,5 +1,5 @@
-from pydantic import BaseModel
-from typing import Optional
+from pydantic import BaseModel, ConfigDict
+from typing import Literal
 
 
 class UserBase(BaseModel):
@@ -15,8 +15,7 @@ class UserSchema(UserBase):
     id: int
     is_active: bool
 
-    class Config:
-        orm_mode = True
+    model_config = ConfigDict(from_attributes=True)
 
 
 class TokenSchema(BaseModel):
@@ -26,3 +25,14 @@ class TokenSchema(BaseModel):
 
 class TokenData(BaseModel):
     username: str
+
+
+class AnalyzeRequest(BaseModel):
+    text: str
+
+
+class GeminiResponse(BaseModel):
+    category: str
+    score: float
+    summary: str
+    sentiment: Literal["positive", "negative", "neutral"]
