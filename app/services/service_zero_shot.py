@@ -39,6 +39,6 @@ def classification_service(text: str, categories_list: list[str]):
             "inputs": text,
             "parameters": {"candidate_labels": categories_list},
         }
-    )[0]
+    )
 
-    return {"category": response["label"], "score": response["score"]}
+    return response[0]["label"], response[0]["score"]

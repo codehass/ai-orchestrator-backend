@@ -46,30 +46,3 @@ def gemini_service(source_text: str, score: float, category: str, response_schem
 def analyzer(source_text: str):
     category, score = classification_service(source_text, categories)
     return gemini_service(source_text, score, category, GeminiResponse)
-
-
-# source_text = """The company announced a new update to its mobile application today.
-# The update improves performance, fixes several bugs, and introduces a new dark mode feature.
-# Users have reacted positively, saying the app feels faster and easier to use."""
-
-
-# category, score = classification_service(source_text, categories)
-
-# print(gemini_service(source_text, score, category, GeminiResponse))
-
-# print(analyzer(source_text))
-
-
-#  hagging face => return category an score of a given text
-# Gemini need to get the category from hugging face
-
-
-# step 1 => get a text, note, paragraph => send it Hugging face => Hugging face will return score and category
-# step 2 => transfer the category to Gemini => Gemini will summary the input
-# step 3 => Gemini will return a JSON result
-# json_result = {
-# "category": str
-# "score": float
-# "summary": str
-# "sentiment": str
-# }
