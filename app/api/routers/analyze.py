@@ -43,3 +43,12 @@ def analyze_text(
     db.refresh(new_article)
 
     return new_article
+
+
+@router.get("/")
+def get_user_history(
+    current_user: UserSchema = Depends(get_current_user), db: Session = Depends(get_db)
+):
+    logs = db.query(HistoryLogs).filter(HistoryLogs.user_id == current_user.id).all()
+
+    return logs
