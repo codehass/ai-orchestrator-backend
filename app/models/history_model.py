@@ -12,7 +12,7 @@ class HistoryLogs(Base):
     category = Column(String, index=True)
     summary = Column(String, nullable=False)
     score = Column(Float, nullable=False)
-    ton = Column(String, nullable=False)
+    sentiment = Column(String, nullable=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="history_logs")

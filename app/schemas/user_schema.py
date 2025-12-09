@@ -1,5 +1,6 @@
 from pydantic import BaseModel, ConfigDict
 from typing import Literal
+from datetime import datetime
 
 
 class UserBase(BaseModel):
@@ -36,3 +37,15 @@ class GeminiResponse(BaseModel):
     score: float
     summary: str
     sentiment: Literal["positive", "negative", "neutral"]
+
+
+class AnalyzeResponse(BaseModel):
+    user_id: int
+    id: int
+    summary: str
+    sentiment: Literal["positive", "negative", "neutral"]
+    category: str
+    score: float
+    created_at: datetime
+
+    model_config = {"from_attributes": True}

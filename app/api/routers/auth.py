@@ -17,9 +17,7 @@ from fastapi import APIRouter
 from ...config import settings
 
 
-router = APIRouter(
-    prefix="/api/v1/auth",
-)
+router = APIRouter(prefix="/api/v1/auth", tags=["Authentication routes"])
 
 
 @router.post("/register", response_model=UserSchema)
