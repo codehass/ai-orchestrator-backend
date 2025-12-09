@@ -1,16 +1,14 @@
-from fastapi import Depends
+from fastapi import Depends, Query
 from sqlalchemy.orm import Session
 from ...authentication.auth import get_current_user
-from ...schemas.user_schema import UserSchema, AnalyzeRequest
+from ...schemas.user_schema import UserSchema, AnalyzeRequest, AnalyzeResponse
 from ...models.history_model import HistoryLogs
 from ...db.database import get_db
 from ...services.service_gemini import analyzer
 import json
 from fastapi import APIRouter
 
-router = APIRouter(
-    prefix="/api/v1/analyze",
-)
+router = APIRouter(prefix="/api/v1/analyze", tags=["Analyze routes"])
 
 
 @router.post("/")
@@ -35,7 +33,7 @@ def analyze_text(
         category=category,
         summary=summary,
         score=score,
-        ton=sentiment,
+        sentiment=sentiment,
     )
 
     db.add(new_article)
@@ -52,3 +50,20 @@ def get_user_history(
     logs = db.query(HistoryLogs).filter(HistoryLogs.user_id == current_user.id).all()
 
     return logs
+
+
+@router.get("/search", response_model=list[AnalyzeResponse])
+def get_filtered_articles(
+    category: str | None = None,
+    sentiment: str | None = None,
+    db: Session = Depends(get_db),
+):
+    query = db.query(HistoryLogs)
+
+    if category:
+        query = query.filter(HistoryLogs.category == category)
+
+    if sentiment:
+        query = query.filter(HistoryLogs.sentiment == sentiment)
+
+    return query.all()
