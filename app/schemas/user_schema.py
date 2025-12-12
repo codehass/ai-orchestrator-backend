@@ -30,12 +30,15 @@ class TokenData(BaseModel):
 
 class AnalyzeRequest(BaseModel):
     text: str
+    is_public: bool
 
 
 class GeminiResponse(BaseModel):
     category: str
     score: float
     summary: str
+    title: str
+    is_public: bool
     sentiment: Literal["positive", "negative", "neutral"]
 
 
@@ -43,6 +46,8 @@ class AnalyzeResponse(BaseModel):
     user_id: int
     id: int
     summary: str
+    title: str
+    is_public: bool
     sentiment: Literal["positive", "negative", "neutral"]
     category: str
     score: float
