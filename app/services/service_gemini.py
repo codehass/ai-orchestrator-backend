@@ -10,6 +10,7 @@ client = genai.Client(api_key=settings.GEMINI_API_KEY)
 def gemini_service(source_text: str, score: float, category: str, response_schema):
     prompt = f"""
         You are an AI assistant specialized in generating structured summaries.
+        Please summarize the following text in the style of a concise newspaper article or brief. Keep the tone professional, journalistic, and engaging. Title the summary if possible. \n\nText to summarize: {source_text},
 
         Your task:
         1. Read the provided text.
